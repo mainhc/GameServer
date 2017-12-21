@@ -27,7 +27,7 @@ func recvConnMsg(conn net.Conn) {
 }
 
 func NetServerMain() {
-	listen_sock, err := net.Listen("tcp", ":4999")
+	listen_sock, err := net.Listen("tcp", ":4999") //不能指定IP
 	checkError(err)
 	defer listen_sock.Close()
 	for {
