@@ -27,7 +27,7 @@ func recvConnMsg(conn net.Conn) {
 }
 
 func NetServerMain() {
-	listen_sock, err := net.Listen("tcp", "Localhost:10000")
+	listen_sock, err := net.Listen("tcp", ":4999")
 	checkError(err)
 	defer listen_sock.Close()
 	for {
