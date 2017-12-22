@@ -1,48 +1,55 @@
 package NetServer
 
-import (
+// 握手阶段就是普通的HTTP
+// 客户端发送消息：
 
+	
+	// GET /chat HTTP/1.1
+	//     Host: server.example.com
+	//     Upgrade: websocket
+	//     Connection: Upgrade
+	//     Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+	//     Origin: http://example.com
+	//     Sec-WebSocket-Version: 13
+
+// 服务端返回消息：	
+	// HTTP/1.1 101 Switching Protocols
+	// Upgrade: websocket
+	// Connection: Upgrade
+	// Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+
+	// 这里的Sec-WebSocket-Accept的计算方法是：
+
+	// base64(hsa1(sec-websocket-key + 258EAFA5-E914-47DA-95CA-C5AB0DC85B11))
+
+	// 如果这个Sec-WebSocket-Accept计算错误浏览器会提示：
+
+	// Sec-WebSocket-Accept dismatch
+
+// 如果返回成功，Websocket就会回调onopen事件
+
+import (
 	"fmt"
 	"net"
-	"os"
 	"log"
 	"strings"
 	"errors"
 	"crypto/sha1"
 	"io"
 	"encoding/base64"
-
 )
 
-func checkError(err error) {
-	if err != nil {
-		fmt.Println("Error:%s", err.Error())
-		os.Exit(1)
-	}
-}
-
-func recvConnMsg(conn net.Conn) {
-	buf := make([]byte, 500)
-	defer conn.Close()
-	for {
-		n, err := conn.Read(buf)
-		if err != nil {
-			fmt.Printf("conn closed:%s ",err.Error());
-			return
-		}
-		conn.Write([]byte("Hahhahhaah"));
-		fmt.Println("recv msg", string(buf[0:n]))
-
-	}
-}
 
 func NetServerMain() {
 
 	tcpaddr,err:=net.ResolveTCPAddr("tcp4",":10131");
-
-	checkError(err)
-	listen_sock,err2 :=net.ListenTCP("tcp",tcpaddr)
-	checkError(err2)
+	if err != nil {
+		log.Println(err)
+	}
+	listen_sock,err2 :=net.ListenTCP("tcp",tcpaddr);
+	if err2 != nil {
+		log.Println(err2)
+	}	
 	fmt.Println("Net Server Main")
 	defer listen_sock.Close()
 	for {
@@ -50,19 +57,14 @@ func NetServerMain() {
 		if err != nil {
 			continue
 		}
-		fmt.Println("Client Connect")
-		for{
-			handleConnection(new_conn);
-		}
-		//go recvConnMsg(new_conn)
+		fmt.Println("Client Connect")	
+		go handleConnection(new_conn);
 	}
-
 }
 
 func handleConnection(conn net.Conn) {
     content := make([]byte, 1024)
     _, err := conn.Read(content)
-    log.Println(string(content))
     if err != nil {
         log.Println(err)
     }
@@ -74,47 +76,36 @@ func handleConnection(conn net.Conn) {
     }
     log.Println("isHttp:", isHttp)
     if isHttp {
-        headers := parseHandshake(string(content))
-        log.Println("headers", headers)
-        secWebsocketKey := headers["Sec-WebSocket-Key"]
- 
+        headers := parseHandshake(string(content))       
+        secWebsocketKey := headers["Sec-WebSocket-Key"] 
         // NOTE：这里省略其他的验证
-        guid := "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
- 
+        guid := "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" 
         // 计算Sec-WebSocket-Accept
-        h := sha1.New()
-        log.Println("accept raw:", secWebsocketKey + guid)
- 
+        h := sha1.New() 
         io.WriteString(h, secWebsocketKey + guid)
         accept := make([]byte, 28)
-        base64.StdEncoding.Encode(accept, h.Sum(nil))
-        log.Println(string(accept))
- 
+        base64.StdEncoding.Encode(accept, h.Sum(nil)) 
         response := "HTTP/1.1 101 Switching Protocols\r\n"
         response = response + "Sec-WebSocket-Accept: " + string(accept) + "\r\n"
         response = response + "Connection: Upgrade\r\n"
-        response = response + "Upgrade: websocket\r\n\r\n"
-         
-             
-        log.Println("response:", response)
+        response = response + "Upgrade: websocket\r\n\r\n"        
         if lenth, err := conn.Write([]byte(response)); err != nil {
             log.Println(err)
         } else {
             log.Println("send len:", lenth)
-        }
- 
+        } 
         wssocket := NewWsSocket(conn)
         for {
             data, err := wssocket.ReadIframe()
             if err != nil {
                 log.Println("readIframe err:" , err)
             }
-            log.Println("read data:", string(data))
+            log.Println("read data 22222:", string(data))
             err = wssocket.SendIframe([]byte("good"))
             if err != nil {
                 log.Println("sendIframe err:" , err)
             }
-            log.Println("send data")
+            log.Println("send data+++++++++4444")
         }
          
     } else {
@@ -195,7 +186,7 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
  
     payloadDataByte := make([]byte, payloadLen)
     this.Conn.Read(payloadDataByte)
-    log.Println("data:", payloadDataByte)
+    log.Println("data+++++++111111:", payloadDataByte)
  
     dataByte := make([]byte, payloadLen)
     for i := 0; i < payloadLen; i++ {
@@ -204,13 +195,11 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
         } else {
             dataByte[i] = payloadDataByte[i]
         }
-    }
- 
+    } 
     if FIN == 1 {
         data = dataByte
         return
-    }
- 
+    } 
     nextData, err := this.ReadIframe()
     if err != nil {
         return
