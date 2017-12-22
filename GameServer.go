@@ -1,9 +1,12 @@
 package main
 
 import (
-	"NetServer"
+	//"./NetServer"
+
 	"fmt"
+	"./NetServer"
 )
+//import("./NetServer")
 
 func main() {
 	fmt.Println("Game Server Start......")
