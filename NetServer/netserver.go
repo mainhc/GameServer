@@ -37,7 +37,9 @@ func recvConnMsg(conn net.Conn) {
 }
 
 func NetServerMain() {
+
 	tcpaddr,err:=net.ResolveTCPAddr("tcp4",":10131");
+
 	checkError(err)
 	listen_sock,err2 :=net.ListenTCP("tcp",tcpaddr)
 	checkError(err2)
