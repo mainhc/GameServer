@@ -50,7 +50,6 @@ func NetServerMain() {
 	if err2 != nil {
 		log.Println(err2)
 	}	
-	fmt.Println("Net Server Main")
 	defer listen_sock.Close()
 	for {
 		new_conn, err := listen_sock.Accept()
@@ -96,16 +95,12 @@ func handleConnection(conn net.Conn) {
         } 
         wssocket := NewWsSocket(conn)
         for {
-            data, err := wssocket.ReadIframe()
-            if err != nil {
-                log.Println("readIframe err:" , err)
-            }
-            log.Println("read data 22222:", string(data))
-            err = wssocket.SendIframe([]byte("good"))
-            if err != nil {
-                log.Println("sendIframe err:" , err)
-            }
-            log.Println("send data+++++++++4444")
+        	recvdata, err := wssocket.ReadIframe()
+            if err != nil {				
+					log.Println("readIframe err:" , err)
+					break;                
+			}   
+			log.Printf("clent send data %s",recvdata);        
         }
          
     } else {
@@ -155,8 +150,8 @@ func (this *WsSocket)SendIframe(data []byte) error {
 }
  
 func (this *WsSocket)ReadIframe() (data []byte, err error){
-    err = nil
- 
+
+    err = nil 
     //第一个字节：FIN + RSV1-3 + OPCODE
     opcodeByte := make([]byte, 1)
     this.Conn.Read(opcodeByte)
@@ -166,7 +161,11 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
     RSV2 := opcodeByte[0] >> 5 & 1
     RSV3 := opcodeByte[0] >> 4 & 1
     OPCODE := opcodeByte[0] & 15
-    log.Println(RSV1,RSV2,RSV3,OPCODE)
+	log.Println(RSV1,RSV2,RSV3,OPCODE)
+	if OPCODE == 8 {
+		err = errors.New("ClientNetCut") //客户端网络主动断开
+		return
+	}
  
     payloadLenByte := make([]byte, 1)
     this.Conn.Read(payloadLenByte)
@@ -186,8 +185,7 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
  
     payloadDataByte := make([]byte, payloadLen)
     this.Conn.Read(payloadDataByte)
-    log.Println("data+++++++111111:", payloadDataByte)
- 
+    
     dataByte := make([]byte, payloadLen)
     for i := 0; i < payloadLen; i++ {
         if mask == 1 {
@@ -197,7 +195,7 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
         }
     } 
     if FIN == 1 {
-        data = dataByte
+		data = dataByte		
         return
     } 
     nextData, err := this.ReadIframe()
