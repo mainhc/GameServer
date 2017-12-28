@@ -36,7 +36,9 @@ import (
 	"errors"
 	"crypto/sha1"
 	"io"
-	"encoding/base64"
+    "encoding/base64"
+    "../msgconfig"
+    "github.com/golang/protobuf/proto"    
 )
 
 
@@ -100,7 +102,15 @@ func handleConnection(conn net.Conn) {
 					log.Println("readIframe err:" , err)
 					break;                
 			}   
-			log.Printf("clent send data %s",recvdata);        
+            log.Printf("clent send data %s",recvdata);
+            newTest := &grace_proto_msg.Player{}
+            err01 := proto.Unmarshal(recvdata, newTest)
+            if err01 != nil {
+                log.Printf("not  %s",recvdata);
+            } else {
+                log.Printf("palyerdata  %d   %s   %d",newTest.GetId(),newTest.GetName(),newTest.GetEnterTime());
+            }
+
         }
          
     } else {
