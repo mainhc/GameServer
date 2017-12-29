@@ -2,15 +2,16 @@
 // source: Player.proto
 
 /*
-Package grace_proto_msg is a generated protocol buffer package.
+Package Player is a generated protocol buffer package.
 
 It is generated from these files:
 	Player.proto
 
 It has these top-level messages:
-	Player
+	CPlayerInfo
+	CPlayerItem
 */
-package grace_proto_msg
+package Player
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
@@ -27,52 +28,71 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type Player struct {
+type CPlayerInfo struct {
 	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
 	EnterTime        *uint64 `protobuf:"varint,3,req,name=enterTime" json:"enterTime,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Player) Reset()                    { *m = Player{} }
-func (m *Player) String() string            { return proto.CompactTextString(m) }
-func (*Player) ProtoMessage()               {}
-func (*Player) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (m *CPlayerInfo) Reset()                    { *m = CPlayerInfo{} }
+func (m *CPlayerInfo) String() string            { return proto.CompactTextString(m) }
+func (*CPlayerInfo) ProtoMessage()               {}
+func (*CPlayerInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-func (m *Player) GetId() uint32 {
+func (m *CPlayerInfo) GetId() uint32 {
 	if m != nil && m.Id != nil {
 		return *m.Id
 	}
 	return 0
 }
 
-func (m *Player) GetName() string {
+func (m *CPlayerInfo) GetName() string {
 	if m != nil && m.Name != nil {
 		return *m.Name
 	}
 	return ""
 }
 
-func (m *Player) GetEnterTime() uint64 {
+func (m *CPlayerInfo) GetEnterTime() uint64 {
 	if m != nil && m.EnterTime != nil {
 		return *m.EnterTime
 	}
 	return 0
 }
 
+type CPlayerItem struct {
+	Itemid           *uint32 `protobuf:"varint,1,req,name=itemid" json:"itemid,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPlayerItem) Reset()                    { *m = CPlayerItem{} }
+func (m *CPlayerItem) String() string            { return proto.CompactTextString(m) }
+func (*CPlayerItem) ProtoMessage()               {}
+func (*CPlayerItem) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+
+func (m *CPlayerItem) GetItemid() uint32 {
+	if m != nil && m.Itemid != nil {
+		return *m.Itemid
+	}
+	return 0
+}
+
 func init() {
-	proto.RegisterType((*Player)(nil), "grace.proto.msg.Player")
+	proto.RegisterType((*CPlayerInfo)(nil), "Player.cPlayerInfo")
+	proto.RegisterType((*CPlayerItem)(nil), "Player.cPlayerItem")
 }
 
 func init() { proto.RegisterFile("Player.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 102 bytes of a gzipped FileDescriptorProto
+	// 115 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x09, 0xc8, 0x49, 0xac,
-	0x4c, 0x2d, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4f, 0x2f, 0x4a, 0x4c, 0x4e, 0x85,
-	0x70, 0xf4, 0x72, 0x8b, 0xd3, 0x95, 0x4c, 0xb9, 0xd8, 0x20, 0x0a, 0x84, 0xb8, 0xb8, 0x98, 0x32,
-	0x53, 0x24, 0x18, 0x15, 0x98, 0x34, 0x78, 0x85, 0x78, 0xb8, 0x58, 0xf2, 0x12, 0x73, 0x53, 0x25,
-	0x98, 0x14, 0x98, 0x34, 0x38, 0x85, 0x04, 0xb9, 0x38, 0x53, 0xf3, 0x4a, 0x52, 0x8b, 0x42, 0x32,
-	0x73, 0x53, 0x25, 0x98, 0x15, 0x98, 0x34, 0x58, 0x00, 0x01, 0x00, 0x00, 0xff, 0xff, 0x6f, 0x4e,
-	0x01, 0x5b, 0x56, 0x00, 0x00, 0x00,
+	0x4c, 0x2d, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x83, 0xf0, 0x94, 0xac, 0xb8, 0xb8,
+	0x93, 0x21, 0x4c, 0xcf, 0xbc, 0xb4, 0x7c, 0x21, 0x2e, 0x2e, 0xa6, 0xcc, 0x14, 0x09, 0x46, 0x05,
+	0x26, 0x0d, 0x5e, 0x21, 0x1e, 0x2e, 0x96, 0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x26, 0x05, 0x26, 0x0d,
+	0x4e, 0x21, 0x41, 0x2e, 0xce, 0xd4, 0xbc, 0x92, 0xd4, 0xa2, 0x90, 0xcc, 0xdc, 0x54, 0x09, 0x66,
+	0x05, 0x26, 0x0d, 0x16, 0x25, 0x59, 0x84, 0xde, 0x92, 0xd4, 0x5c, 0x21, 0x3e, 0x2e, 0xb6, 0xcc,
+	0x92, 0xd4, 0x5c, 0x98, 0x7e, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb7, 0xa5, 0x25, 0x5e, 0x71,
+	0x00, 0x00, 0x00,
 }

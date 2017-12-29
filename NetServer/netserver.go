@@ -1,5 +1,4 @@
 package NetServer
-
 // 握手阶段就是普通的HTTP
 // 客户端发送消息：
 
@@ -103,7 +102,7 @@ func handleConnection(conn net.Conn) {
 					break;                
 			}   
             log.Printf("clent send data %s",recvdata);
-            newTest := &grace_proto_msg.Player{}
+            newTest := &Player.CPlayerInfo{}
             err01 := proto.Unmarshal(recvdata, newTest)
             if err01 != nil {
                 log.Printf("not  %s",recvdata);

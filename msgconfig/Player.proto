@@ -1,9 +1,13 @@
 // Everything below is located in the js-namespace
 
-package grace.proto.msg;
+package Player;
 
-message Player {
+message cPlayerInfo {
 	required uint32 id = 1;
 	required string name = 2;
 	required uint64 enterTime = 3;
+}
+
+message cPlayerItem{
+	required uint32 itemid = 1;
 }
