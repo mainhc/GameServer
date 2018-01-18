@@ -101,14 +101,21 @@ func handleConnection(conn net.Conn) {
 					log.Println("readIframe err:" , err)
 					break;                
 			}   
-            log.Printf("clent send data %s",recvdata);
+            log.Printf("clent send data ++++%d",len(recvdata));
             newTest := &Player.CPlayerInfo{}
             err01 := proto.Unmarshal(recvdata, newTest)
             if err01 != nil {
-                log.Printf("not  %s",recvdata);
+                log.Printf("not  %s  ",recvdata);
             } else {
                 log.Printf("palyerdata  %d   %s   %d",newTest.GetId(),newTest.GetName(),newTest.GetEnterTime());
             }
+            clientdata,err :=proto.Marshal(newTest);
+            if err == nil {                
+                //wssocket.SendIframe("wwww");
+                wssocket.SendIframe(clientdata);
+                log.Printf("Server Send  ++++++%d",len(clientdata));
+            }
+           
 
         }
          
@@ -143,7 +150,7 @@ func (this *WsSocket)SendIframe(data []byte) error {
         }
     }
  
-    this.Conn.Write([]byte{0x81})
+    this.Conn.Write([]byte{0x82})
  
     var payLenByte byte
     if this.MaskingKey != nil && len(this.MaskingKey) != 4 {
