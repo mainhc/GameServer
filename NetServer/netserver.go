@@ -109,6 +109,8 @@ func handleConnection(conn net.Conn) {
             } else {
                 log.Printf("palyerdata  %d   %s   %d",newTest.GetId(),newTest.GetName(),newTest.GetEnterTime());
             }
+            str3 :="eeeeeer"
+            newTest.Name = &str3;
             clientdata,err :=proto.Marshal(newTest);
             if err == nil {                
                 //wssocket.SendIframe("wwww");
@@ -236,3 +238,5 @@ func parseHandshake(content string) map[string]string {
     }
     return headers
 }
+
+

@@ -5,10 +5,13 @@ import (
 
 	"fmt"
 	"./NetServer"
+	
 )
-//import("./NetServer")
+
 
 func main() {
 	fmt.Println("Game Server Start......")
+	NetServer.InitMsg()
 	NetServer.NetServerMain()
+	
 }
