@@ -36,8 +36,8 @@ import (
 	"crypto/sha1"
 	"io"
     "encoding/base64"
-    "../msgconfig"
-    "github.com/golang/protobuf/proto"    
+    //"../msgconfig"
+    //"github.com/golang/protobuf/proto"    
 )
 
 
@@ -100,23 +100,19 @@ func handleConnection(conn net.Conn) {
             if err != nil {				
 					log.Println("readIframe err:" , err)
 					break;                
-			}   
-            log.Printf("clent send data ++++%d",len(recvdata));
-            newTest := &Player.CPlayerInfo{}
-            err01 := proto.Unmarshal(recvdata, newTest)
-            if err01 != nil {
-                log.Printf("not  %s  ",recvdata);
-            } else {
-                log.Printf("palyerdata  %d   %s   %d",newTest.GetId(),newTest.GetName(),newTest.GetEnterTime());
-            }
-            str3 :="eeeeeer"
-            newTest.Name = &str3;
-            clientdata,err :=proto.Marshal(newTest);
-            if err == nil {                
-                //wssocket.SendIframe("wwww");
-                wssocket.SendIframe(clientdata);
-                log.Printf("Server Send  ++++++%d",len(clientdata));
-            }
+            }   
+            
+            log.Printf("clent send data ++++%s",recvdata);  
+            recvMsgFromClient(recvdata);         
+          
+            // str3 :="eeeeeer"
+            // newTest.Name = &str3;
+            // clientdata,err :=proto.Marshal(newTest);
+            // if err == nil {                
+            //     //wssocket.SendIframe("wwww");
+            //     wssocket.SendIframe(clientdata);
+            //     log.Printf("Server Send  ++++++%d",len(clientdata));
+            // }
            
 
         }
@@ -185,9 +181,10 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
 		return
 	}
  
-    payloadLenByte := make([]byte, 1)
-    this.Conn.Read(payloadLenByte)
-    payloadLen := int(payloadLenByte[0] & 0x7F)
+    payloadLenByte := make([]byte, 1) 
+
+    this.Conn.Read(payloadLenByte)    
+    payloadLen := int(payloadLenByte[0] & 0x7F)    
     mask := payloadLenByte[0] >> 7
  
     if payloadLen == 127 {
