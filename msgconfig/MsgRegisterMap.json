@@ -2,5 +2,5 @@
    "10001":"Player.cPlayerInfo",
    "10002":"Player.cPlayerItem",
    "10003":"Player.cPlayerTrun",
-   "10004":"Player.cPlayerConnect"   
+   "100001":"Player.cPlayerConnect"   
 }

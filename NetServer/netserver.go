@@ -30,14 +30,12 @@ package NetServer
 import (
 	"fmt"
 	"net"
-    "log"
-    //"bytes"    
+    "log"  
 	"strings"
 	"errors"
 	"crypto/sha1"
 	"io"
-    "encoding/base64"
-    //"encoding/binary"
+    "encoding/base64"  
     //"../msgconfig"
     //"github.com/golang/protobuf/proto"    
 )
@@ -105,24 +103,13 @@ func handleConnection(conn net.Conn) {
         
         for {
         	recvdata, err := wssocket.ReadIframe()
-            if err != nil {				
+            if err != nil {		
+                    log.Print(clientid)
 					log.Println("readIframe err:" , err)
 					break;                
-            }   
-            
-            log.Printf("clent send data ++++%s",recvdata);  
-            recvMsgFromClient(recvdata);         
-          
-            // str3 :="eeeeeer"
-            // newTest.Name = &str3;
-            // clientdata,err :=proto.Marshal(newTest);
-            // if err == nil {                
-            //wssocket.SendIframe("wwww");
-            //     wssocket.SendIframe(clientdata);
-            //     log.Printf("Server Send  ++++++%d",len(clientdata));
-            // }
-           
-
+            } 
+            //log.Print(recvdata) 
+            recvMsgFromClient(clientid,recvdata);  
         }
          
     } else {
@@ -190,7 +177,6 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
 	}
  
     payloadLenByte := make([]byte, 1) 
-
     this.Conn.Read(payloadLenByte)    
     payloadLen := int(payloadLenByte[0] & 0x7F)    
     mask := payloadLenByte[0] >> 7
@@ -198,8 +184,7 @@ func (this *WsSocket)ReadIframe() (data []byte, err error){
     if payloadLen == 127 {
         extendedByte := make([]byte, 8)
         this.Conn.Read(extendedByte)
-    }
-     
+    }     
     maskingByte := make([]byte, 4)
     if mask == 1 {
         this.Conn.Read(maskingByte)

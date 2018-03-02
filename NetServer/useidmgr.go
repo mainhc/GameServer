@@ -12,6 +12,10 @@ func initUserIdMgr(){
     lastuseid = 100001
 }
 
+func onDeleClientID(clientId int){
+    nouseid.PushFront(clientId)
+}
+
 func getCanUserID() int {
     if nouseid.Len() > 0 {
         res := nouseid.Front().Value.(int)
