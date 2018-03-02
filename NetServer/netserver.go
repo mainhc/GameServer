@@ -30,15 +30,19 @@ package NetServer
 import (
 	"fmt"
 	"net"
-	"log"
+    "log"
+    //"bytes"    
 	"strings"
 	"errors"
 	"crypto/sha1"
 	"io"
     "encoding/base64"
+    //"encoding/binary"
     //"../msgconfig"
     //"github.com/golang/protobuf/proto"    
 )
+
+
 
 
 func NetServerMain() {
@@ -63,6 +67,7 @@ func NetServerMain() {
 }
 
 func handleConnection(conn net.Conn) {
+
     content := make([]byte, 1024)
     _, err := conn.Read(content)
     if err != nil {
@@ -93,8 +98,11 @@ func handleConnection(conn net.Conn) {
             log.Println(err)
         } else {
             log.Println("send len:", lenth)
-        } 
+        }        
         wssocket := NewWsSocket(conn)
+        clientid := getCanUserID()
+        talkClientConnectSuc(wssocket,clientid);
+        
         for {
         	recvdata, err := wssocket.ReadIframe()
             if err != nil {				
@@ -109,7 +117,7 @@ func handleConnection(conn net.Conn) {
             // newTest.Name = &str3;
             // clientdata,err :=proto.Marshal(newTest);
             // if err == nil {                
-            //     //wssocket.SendIframe("wwww");
+            //wssocket.SendIframe("wwww");
             //     wssocket.SendIframe(clientdata);
             //     log.Printf("Server Send  ++++++%d",len(clientdata));
             // }

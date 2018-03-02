@@ -2,6 +2,10 @@
 
 package Player;
 
+message cPlayerConnect{
+	required uint32 clinetid = 1;
+}
+
 message cPlayerInfo {
 	required uint32 id = 1;
 	required string name = 2;
@@ -10,4 +14,9 @@ message cPlayerInfo {
 
 message cPlayerItem{
 	required uint32 itemid = 1;
+}
+
+message cPlayerTrun{
+	required uint32 objLogicID = 1;
+	required string fDir = 2;
 }
