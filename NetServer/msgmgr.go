@@ -30,7 +30,7 @@ func deleClientSock(clientid int){
     _,ok := akToClientSock[clientid]
     if ok{
        delete(akToClientSock,clientid)
-
+       onDeleClientID(clientid) 
     }  
 }
 

@@ -104,8 +104,8 @@ func handleConnection(conn net.Conn) {
         for {
         	recvdata, err := wssocket.ReadIframe()
             if err != nil {		
-                    log.Print(clientid)
-					log.Println("readIframe err:" , err)
+                    log.Print(clientid)                    
+                    ClientSockDis(clientid)
 					break;                
             } 
             //log.Print(recvdata) 

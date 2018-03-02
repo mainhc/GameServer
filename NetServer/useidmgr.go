@@ -1,7 +1,8 @@
 package NetServer
 
 import (	
-    "container/list"  
+    "container/list"
+    "log"   
 )
 
 var nouseid *list.List
@@ -13,6 +14,8 @@ func initUserIdMgr(){
 }
 
 func onDeleClientID(clientId int){
+    log.Printf("onDeleClientID+++++++++")
+    log.Print(clientId)
     nouseid.PushFront(clientId)
 }
 
