@@ -81,6 +81,29 @@ func registerMsgByConfig(){
     }
 }
 
+func broadCastMsgToClient(sendMsg []byte){
+    for _,v := range akToClientSock{
+        v.SendIframe(sendMsg)
+    }
+}
+
+func createPlayer(tempid int){
+    sendMsg := &Player.CPlayerCreator{
+        ClientId:proto.Uint32(uint32(tempid)),
+    }
+    //sendMsg.Clinetid = clientId;
+    senddata,_ := proto.Marshal(sendMsg)
+    var sendbuf bytes.Buffer
+    xNum :=uint32(100002)
+    tempsendbuf := bytes.NewBuffer([]byte{})
+        //客户端请求连上服务器
+    binary.Write(tempsendbuf,binary.LittleEndian,xNum)
+    sendbuf.Write(tempsendbuf.Bytes())
+    //log.Print(sendbuf.Bytes())
+    sendbuf.Write(senddata)
+    broadCastMsgToClient(sendbuf.Bytes())  
+}
+
 func talkClientConnectSuc(clientSocket *WsSocket, clientId int){
 
     log.Printf("talkClientConnectSuc +++ %d",clientId)
@@ -96,12 +119,14 @@ func talkClientConnectSuc(clientSocket *WsSocket, clientId int){
         //客户端请求连上服务器
     binary.Write(tempsendbuf,binary.LittleEndian,xNum)
     sendbuf.Write(tempsendbuf.Bytes())
-    log.Print(sendbuf.Bytes())
     //binary.Write(sendbuf,binary.LittleEndian,senddata)
     sendbuf.Write(senddata)
     log.Print(sendbuf.Bytes())
     //bytes.Join(sendbuf,senddata);
+    //broadCastMsgToClient(sendbuf.Bytes())
     clientSocket.SendIframe(sendbuf.Bytes())
+    createPlayer(clientId)
+
 }
 
 func ClientSockDis(clientId int){
@@ -131,8 +156,9 @@ func recvMsgFromClient(clinetid int,recvData []byte){
    if isPassMsg(int(mapintID)){
        log.Printf("+++++++++++Pass")
        log.Print(mapintID)
-        clientsock :=getClientSock(clinetid)
-        clientsock.SendIframe(recvData)
+       broadCastMsgToClient(recvData)
+        //clientsock :=getClientSock(clinetid)
+        //clientsock.SendIframe(recvData)
    }     
    
    // log.Print(mapintID)

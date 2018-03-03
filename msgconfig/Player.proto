@@ -3,7 +3,11 @@
 package Player;
 
 message cPlayerConnect{
-	required uint32 clinetid = 1;
+	required uint32 Clinetid = 1;
+}
+
+message cPlayerCreator{
+	required uint32 ClientId = 1;
 }
 
 message cPlayerInfo {
