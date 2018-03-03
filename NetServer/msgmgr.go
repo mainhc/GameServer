@@ -119,6 +119,7 @@ func talkClientConnectSuc(clientSocket *WsSocket, clientId int){
         //客户端请求连上服务器
     binary.Write(tempsendbuf,binary.LittleEndian,xNum)
     sendbuf.Write(tempsendbuf.Bytes())
+    //log.Print(sendbuf.Bytes())
     //binary.Write(sendbuf,binary.LittleEndian,senddata)
     sendbuf.Write(senddata)
     log.Print(sendbuf.Bytes())
