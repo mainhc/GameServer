@@ -8,7 +8,8 @@ import (
     "log"  
     "../msgconfig"
     "encoding/binary"
-    "github.com/golang/protobuf/proto"     
+    "github.com/golang/protobuf/proto"
+    "../Game"     
 )
 
 var m_msgstr map[string]int
@@ -88,26 +89,31 @@ func broadCastMsgToClient(sendMsg []byte){
 }
 
 func createPlayer(tempid int){
-    sendMsg := &Player.CPlayerCreator{
-        ClientId:proto.Uint32(uint32(tempid)),
+    for k,_ := range akToClientSock{
+        clienttempid := k
+        sendMsg := &Player.CPlayerCreator{
+            ClientId:proto.Uint32(uint32(clienttempid)),
+        }
+        //sendMsg.Clinetid = clientId;
+        senddata,_ := proto.Marshal(sendMsg)
+        var sendbuf bytes.Buffer
+        xNum :=uint32(100002)
+        tempsendbuf := bytes.NewBuffer([]byte{})
+            //客户端请求连上服务器
+        binary.Write(tempsendbuf,binary.LittleEndian,xNum)
+        sendbuf.Write(tempsendbuf.Bytes())
+        //log.Print(sendbuf.Bytes())
+        sendbuf.Write(senddata)
+        broadCastMsgToClient(sendbuf.Bytes()) 
     }
-    //sendMsg.Clinetid = clientId;
-    senddata,_ := proto.Marshal(sendMsg)
-    var sendbuf bytes.Buffer
-    xNum :=uint32(100002)
-    tempsendbuf := bytes.NewBuffer([]byte{})
-        //客户端请求连上服务器
-    binary.Write(tempsendbuf,binary.LittleEndian,xNum)
-    sendbuf.Write(tempsendbuf.Bytes())
-    //log.Print(sendbuf.Bytes())
-    sendbuf.Write(senddata)
-    broadCastMsgToClient(sendbuf.Bytes())  
+     
 }
 
 func talkClientConnectSuc(clientSocket *WsSocket, clientId int){
 
     log.Printf("talkClientConnectSuc +++ %d",clientId)
     addClientSock(clientId,clientSocket)
+    Game.AddPlayer(clientId)   
     sendMsg := &Player.CPlayerConnect{
         Clinetid:proto.Uint32(uint32(clientId)),
     }
@@ -157,23 +163,12 @@ func recvMsgFromClient(clinetid int,recvData []byte){
    if isPassMsg(int(mapintID)){
        log.Printf("+++++++++++Pass")
        log.Print(mapintID)
-       broadCastMsgToClient(recvData)
+       if Game.GetGameCanStart() {
+            broadCastMsgToClient(recvData)
+       }      
         //clientsock :=getClientSock(clinetid)
         //clientsock.SendIframe(recvData)
-   }     
-   
-   // log.Print(mapintID)
-    //log.Print(msgdata)
-   
-    //newTest := &Player.CPlayerInfo{}
-    //err01 := proto.Unmarshal(msgdata,newTest)
-    //if err01 != nil {
-       // log.Printf("not  %s  ",recvdata);
-    //} else {
-    //    log.Print(newTest);
-     //   log.Printf("palyerdata  %d   %s   %d",newTest.GetId(),newTest.GetName(),newTest.GetEnterTime());
-    //}
-
+   } 
 }
 
 

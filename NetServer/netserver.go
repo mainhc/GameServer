@@ -65,7 +65,6 @@ func NetServerMain() {
 }
 
 func handleConnection(conn net.Conn) {
-
     content := make([]byte, 1024)
     _, err := conn.Read(content)
     if err != nil {
