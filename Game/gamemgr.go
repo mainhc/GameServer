@@ -1,7 +1,7 @@
 package Game
 
 import (	   
-    "log"
+   // "log"
     "time"   
 )
 
@@ -15,15 +15,15 @@ var m_gamebegintime time.Time
 
 
 
-func InitGame(){
-    log.Print("++++++++++++++init game")
+func InitGame(){   
+    InitTableMgr()
     m_akPlayer = make(map[int]int)
     m_iPlayerNum = 0
     m_iGameState = ZhunBie
     var gametime time.Time;
     gametime = time.Now();
     m_gamebegintime = gametime
-  
+    GetTabelDataById("ObjView","10002") 
     for{
         newtime := time.Now();
         timego := newtime.Sub(gametime).Nanoseconds();
@@ -34,8 +34,8 @@ func InitGame(){
         }
        
 
-    }
-    log.Print("++++++++++++++init game end")
+    }   
+    
 }
 
 func AddPlayer(clientid int){
