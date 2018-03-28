@@ -10,6 +10,13 @@ message cPlayerCreator{
 	required uint32 ClientId = 1;
 }
 
+message cPlayerObjInfo{
+	required uint32 x = 1;
+	required uint32 y = 2;
+	required uint32	iHp = 3;
+	required uint32	iMaxHp = 4;
+}
+
 message cPlayerInfo {
 	required uint32 id = 1;
 	required string name = 2;
@@ -23,4 +30,15 @@ message cPlayerItem{
 message cPlayerTrun{
 	required uint32 objLogicID = 1;
 	required string fDir = 2;
+}
+
+message cPlayerState{
+	required uint32 objLogicID =1;
+	required uint32 objState =2;
+}
+
+message cPlayerGridChange{
+	required uint32 objLogicID = 1;
+	required uint32 x =2;
+	required uint32 y =3;
 }

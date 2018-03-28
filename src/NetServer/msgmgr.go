@@ -1,6 +1,7 @@
 package NetServer
 
 import (
+	"Common"
 	"Game"
 	"bytes"
 	"encoding/binary"
@@ -31,7 +32,7 @@ func deleClientSock(clientid int) {
 	_, ok := akToClientSock[clientid]
 	if ok {
 		delete(akToClientSock, clientid)
-		onDeleClientID(clientid)
+		Common.OnDeleClientID(clientid)
 	}
 }
 
@@ -61,7 +62,7 @@ func InitMsg() {
 	akToClientSock = make(map[int]*WsSocket)
 
 	registerMsgByConfig()
-	initUserIdMgr()
+
 	//registerMsg("Player.cPlayerInfo",10001);
 }
 
@@ -128,10 +129,10 @@ func talkClientConnectSuc(clientSocket *WsSocket, clientId int) {
 	//客户端请求连上服务器
 	binary.Write(tempsendbuf, binary.LittleEndian, xNum)
 	sendbuf.Write(tempsendbuf.Bytes())
-	//log.Print(sendbuf.Bytes())
+
 	//binary.Write(sendbuf,binary.LittleEndian,senddata)
 	sendbuf.Write(senddata)
-	log.Print(sendbuf.Bytes())
+	log.Printf("testConnectSuc+++")
 	//bytes.Join(sendbuf,senddata);
 	//broadCastMsgToClient(sendbuf.Bytes())
 	clientSocket.SendIframe(sendbuf.Bytes())

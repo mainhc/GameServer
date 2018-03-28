@@ -10,7 +10,6 @@ var akTableName [1]string
 var akTabelData map[string]interface{}
 
 func InitTableMgr() {
-	log.Print("++++++++InitTableMgr")
 	akTabelData = make(map[string]interface{})
 
 	akTableName[0] = "ObjView"
@@ -24,7 +23,6 @@ func InitTableMgr() {
 		if err != nil {
 			continue
 		}
-		log.Print("++++++++++2")
 		var pValue interface{}
 		err2 := json.Unmarshal(bytes, &pValue)
 		if err2 != nil {
@@ -38,21 +36,18 @@ func GetTableData(strname string) interface{} {
 	log.Print("+++++++++++++GetTableData")
 	temp, ok := akTabelData[strname]
 	if !ok {
-		log.Print("+++++++++++++GetTableData++++2")
+
 		return nil
 	}
-	log.Print("+++++++++++++GetTableData++++3")
 	return temp
 }
 
 func GetTabelDataById(tabelname string, indexID string) interface{} {
-	log.Print("+++++++++++++GetTabelDataById")
+
 	tabledata := GetTableData(tabelname)
 	if tabledata == nil {
-		log.Print("+++++++++++++GetTabelDataById++++3")
 		return nil
 	}
-	log.Print("+++++++++++++GetTabelDataById++++2")
 	datamap := tabledata.(map[string]interface{})
 	tabelvalue, ok := datamap[indexID]
 	if !ok {
