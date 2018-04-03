@@ -1,9 +1,9 @@
 package Game
 
 import (
-	// "log"
 	"bytes"
 	"encoding/binary"
+	"log"
 	"msgconfig"
 	"sync"
 	"time"
@@ -52,11 +52,13 @@ func GetGameCanStart() bool {
 }
 
 func s2cZhunbei() {
+
 	sendMsg := &Player.CUiMessage{}
 	tempstr := "updataZhunBei"
 	sendMsg.UiMsgName = &tempstr
-	paramint := [2]uint32{uint32(3), 12}
-	sendMsg.AkMsgParame = &paramint[0]
+	paramint := []uint32{uint32(3), 12}
+	sendMsg.AkMsgParame = paramint
+	log.Print("updataZhunBei")
 
 	senddata, _ := proto.Marshal(sendMsg)
 	var sendbuf bytes.Buffer

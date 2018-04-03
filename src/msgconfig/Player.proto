@@ -12,7 +12,7 @@ message cPlayerCreator{
 
 message cUiMessage{
 	required string UiMsgName =1;
-	optional uint32 akMsgParame=2;
+	repeated uint32 akMsgParame=2;
 }
 
 message cPlayerObjInfo{
