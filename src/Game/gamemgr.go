@@ -19,6 +19,8 @@ const iMapHeight = 16
 var m_iGameState GameState
 var m_gamebegintime time.Time
 
+var m_iTimeGo int
+
 //记录当前的游戏状态
 
 func InitGame() {
@@ -29,6 +31,7 @@ func InitGame() {
 	var gametime time.Time
 	gametime = time.Now()
 	m_gamebegintime = gametime
+	m_iTimeGo = 10
 	//GetTabelDataById("ObjView","10002")
 	for {
 		newtime := time.Now()
@@ -52,11 +55,12 @@ func GetGameCanStart() bool {
 }
 
 func s2cZhunbei() {
-
+	m_iTimeGo--
 	sendMsg := &Player.CUiMessage{}
 	tempstr := "updataZhunBei"
 	sendMsg.UiMsgName = &tempstr
-	paramint := []uint32{uint32(3), 12}
+	iPlayerNum := NetServer.GetPlayerNum()
+	paramint := []uint32{uint32(iPlayerNum), uint32(m_iTimeGo)}
 	sendMsg.AkMsgParame = paramint
 	log.Print("updataZhunBei")
 

@@ -122,6 +122,10 @@ func createPlayer(tempid int) {
 
 }
 
+func GetPlayerNum() int {
+	return len(akToClientSock)
+}
+
 func talkClientConnectSuc(clientSocket *WsSocket, clientId int) {
 
 	log.Printf("talkClientConnectSuc +++ %d", clientId)
