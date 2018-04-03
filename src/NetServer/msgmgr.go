@@ -2,7 +2,6 @@ package NetServer
 
 import (
 	"Common"
-	"Game"
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
@@ -16,6 +15,8 @@ import (
 
 var m_msgstr map[string]int
 var m_msgid map[int]string
+
+var m_bIsGameIsStart bool
 
 var akToClientSock map[int]*WsSocket
 
@@ -55,15 +56,23 @@ func registerMsg(msgstr string, msgid int) {
 func getMsgProById(id int) {
 
 }
+func isGameCanStart() bool {
+	return m_bIsGameIsStart
+}
 
 func InitMsg() {
 	m_msgstr = make(map[string]int)
 	m_msgid = make(map[int]string)
 	akToClientSock = make(map[int]*WsSocket)
+	m_bIsGameIsStart = false
 
 	registerMsgByConfig()
 
 	//registerMsg("Player.cPlayerInfo",10001);
+}
+
+func SetGameCanStart() {
+	m_bIsGameIsStart = true
 }
 
 func registerMsgByConfig() {
@@ -86,7 +95,7 @@ func registerMsgByConfig() {
 	}
 }
 
-func broadCastMsgToClient(sendMsg []byte) {
+func BroadCastMsgToClient(sendMsg []byte) {
 	for _, v := range akToClientSock {
 		v.SendIframe(sendMsg)
 	}
@@ -108,7 +117,7 @@ func createPlayer(tempid int) {
 		sendbuf.Write(tempsendbuf.Bytes())
 		//log.Print(sendbuf.Bytes())
 		sendbuf.Write(senddata)
-		broadCastMsgToClient(sendbuf.Bytes())
+		BroadCastMsgToClient(sendbuf.Bytes())
 	}
 
 }
@@ -117,7 +126,7 @@ func talkClientConnectSuc(clientSocket *WsSocket, clientId int) {
 
 	log.Printf("talkClientConnectSuc +++ %d", clientId)
 	addClientSock(clientId, clientSocket)
-	Game.AddPlayer(clientId)
+	//Game.AddPlayer(clientId)
 	sendMsg := &Player.CPlayerConnect{
 		Clinetid: proto.Uint32(uint32(clientId)),
 	}
@@ -165,8 +174,8 @@ func recvMsgFromClient(clinetid int, recvData []byte) {
 	if isPassMsg(int(mapintID)) {
 		log.Printf("+++++++++++Pass")
 		log.Print(mapintID)
-		if Game.GetGameCanStart() {
-			broadCastMsgToClient(recvData)
+		if isGameCanStart() {
+			BroadCastMsgToClient(recvData)
 		}
 		//clientsock :=getClientSock(clinetid)
 		//clientsock.SendIframe(recvData)

@@ -1,1 +1,1 @@
-protoc.exe  --plugin=protoc-gen-go=F:\Go\bin\protoc-gen-go.exe --go_out . --proto_path .  Player.proto
+protoc.exe  --plugin=protoc-gen-go=D:\Go\bin\protoc-gen-go.exe --go_out . --proto_path .  Player.proto

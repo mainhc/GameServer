@@ -10,6 +10,11 @@ message cPlayerCreator{
 	required uint32 ClientId = 1;
 }
 
+message cUiMessage{
+	required string UiMsgName =1;
+	optional uint32 akMsgParame=2;
+}
+
 message cPlayerObjInfo{
 	required uint32 x = 1;
 	required uint32 y = 2;

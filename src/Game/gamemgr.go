@@ -2,14 +2,20 @@ package Game
 
 import (
 	// "log"
+	"bytes"
+	"encoding/binary"
+	"msgconfig"
+	"sync"
 	"time"
+
+	"NetServer"
+
+	"github.com/golang/protobuf/proto"
 )
 
 const iMapWidth = 16
 const iMapHeight = 16
 
-var m_akPlayer map[int]int
-var m_iPlayerNum int
 var m_iGameState GameState
 var m_gamebegintime time.Time
 
@@ -18,8 +24,7 @@ var m_gamebegintime time.Time
 func InitGame() {
 	InitTableMgr()
 	InitMap(iMapWidth, iMapHeight)
-	m_akPlayer = make(map[int]int)
-	m_iPlayerNum = 0
+
 	m_iGameState = ZhunBie
 	var gametime time.Time
 	gametime = time.Now()
@@ -38,11 +43,6 @@ func InitGame() {
 
 }
 
-func AddPlayer(clientid int) {
-	m_iPlayerNum++
-	m_akPlayer[clientid] = m_iPlayerNum
-}
-
 func GetGameCanStart() bool {
 	if m_iGameState == KaiShi {
 		return true
@@ -51,13 +51,48 @@ func GetGameCanStart() bool {
 	}
 }
 
+func s2cZhunbei() {
+	sendMsg := &Player.CUiMessage{}
+	tempstr := "updataZhunBei"
+	sendMsg.UiMsgName = &tempstr
+	paramint := [2]uint32{uint32(3), 12}
+	sendMsg.AkMsgParame = &paramint[0]
+
+	senddata, _ := proto.Marshal(sendMsg)
+	var sendbuf bytes.Buffer
+	xNum := uint32(100003)
+	tempsendbuf := bytes.NewBuffer([]byte{})
+	binary.Write(tempsendbuf, binary.LittleEndian, xNum)
+	sendbuf.Write(tempsendbuf.Bytes())
+	sendbuf.Write(senddata)
+	NetServer.BroadCastMsgToClient(sendbuf.Bytes())
+}
+
+func doZhunBei() {
+	ticker := time.NewTicker(time.Second * 1)
+	wg := sync.WaitGroup{}
+	wg.Add(10)
+	go func() {
+		for _ = range ticker.C {
+
+			s2cZhunbei()
+			wg.Done()
+		}
+	}()
+	wg.Wait()
+	NetServer.SetGameCanStart()
+	ticker.Stop()
+}
+
 func updateGame(dt int) {
 	//log.Print(dt)
+
 	if m_iGameState == ZhunBie {
 		newtime := time.Now()
 		timego := int(newtime.Sub(m_gamebegintime).Nanoseconds() / 1e9)
 		if timego >= 10 {
 			m_iGameState = KaiShi
+			doZhunBei()
 		}
 	} else {
 		if m_iGameState == KaiShi {

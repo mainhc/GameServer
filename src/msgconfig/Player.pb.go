@@ -10,9 +10,13 @@ It is generated from these files:
 It has these top-level messages:
 	CPlayerConnect
 	CPlayerCreator
+	CUiMessage
+	CPlayerObjInfo
 	CPlayerInfo
 	CPlayerItem
 	CPlayerTrun
+	CPlayerState
+	CPlayerGridChange
 */
 package Player
 
@@ -65,6 +69,72 @@ func (m *CPlayerCreator) GetClientId() uint32 {
 	return 0
 }
 
+type CUiMessage struct {
+	UiMsgName        *string `protobuf:"bytes,1,req,name=UiMsgName" json:"UiMsgName,omitempty"`
+	AkMsgParame      *uint32 `protobuf:"varint,2,opt,name=akMsgParame" json:"akMsgParame,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CUiMessage) Reset()                    { *m = CUiMessage{} }
+func (m *CUiMessage) String() string            { return proto.CompactTextString(m) }
+func (*CUiMessage) ProtoMessage()               {}
+func (*CUiMessage) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *CUiMessage) GetUiMsgName() string {
+	if m != nil && m.UiMsgName != nil {
+		return *m.UiMsgName
+	}
+	return ""
+}
+
+func (m *CUiMessage) GetAkMsgParame() uint32 {
+	if m != nil && m.AkMsgParame != nil {
+		return *m.AkMsgParame
+	}
+	return 0
+}
+
+type CPlayerObjInfo struct {
+	X                *uint32 `protobuf:"varint,1,req,name=x" json:"x,omitempty"`
+	Y                *uint32 `protobuf:"varint,2,req,name=y" json:"y,omitempty"`
+	IHp              *uint32 `protobuf:"varint,3,req,name=iHp" json:"iHp,omitempty"`
+	IMaxHp           *uint32 `protobuf:"varint,4,req,name=iMaxHp" json:"iMaxHp,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPlayerObjInfo) Reset()                    { *m = CPlayerObjInfo{} }
+func (m *CPlayerObjInfo) String() string            { return proto.CompactTextString(m) }
+func (*CPlayerObjInfo) ProtoMessage()               {}
+func (*CPlayerObjInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+func (m *CPlayerObjInfo) GetX() uint32 {
+	if m != nil && m.X != nil {
+		return *m.X
+	}
+	return 0
+}
+
+func (m *CPlayerObjInfo) GetY() uint32 {
+	if m != nil && m.Y != nil {
+		return *m.Y
+	}
+	return 0
+}
+
+func (m *CPlayerObjInfo) GetIHp() uint32 {
+	if m != nil && m.IHp != nil {
+		return *m.IHp
+	}
+	return 0
+}
+
+func (m *CPlayerObjInfo) GetIMaxHp() uint32 {
+	if m != nil && m.IMaxHp != nil {
+		return *m.IMaxHp
+	}
+	return 0
+}
+
 type CPlayerInfo struct {
 	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
@@ -75,7 +145,7 @@ type CPlayerInfo struct {
 func (m *CPlayerInfo) Reset()                    { *m = CPlayerInfo{} }
 func (m *CPlayerInfo) String() string            { return proto.CompactTextString(m) }
 func (*CPlayerInfo) ProtoMessage()               {}
-func (*CPlayerInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+func (*CPlayerInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *CPlayerInfo) GetId() uint32 {
 	if m != nil && m.Id != nil {
@@ -106,7 +176,7 @@ type CPlayerItem struct {
 func (m *CPlayerItem) Reset()                    { *m = CPlayerItem{} }
 func (m *CPlayerItem) String() string            { return proto.CompactTextString(m) }
 func (*CPlayerItem) ProtoMessage()               {}
-func (*CPlayerItem) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (*CPlayerItem) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *CPlayerItem) GetItemid() uint32 {
 	if m != nil && m.Itemid != nil {
@@ -124,7 +194,7 @@ type CPlayerTrun struct {
 func (m *CPlayerTrun) Reset()                    { *m = CPlayerTrun{} }
 func (m *CPlayerTrun) String() string            { return proto.CompactTextString(m) }
 func (*CPlayerTrun) ProtoMessage()               {}
-func (*CPlayerTrun) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (*CPlayerTrun) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
 
 func (m *CPlayerTrun) GetObjLogicID() uint32 {
 	if m != nil && m.ObjLogicID != nil {
@@ -140,28 +210,97 @@ func (m *CPlayerTrun) GetFDir() string {
 	return ""
 }
 
+type CPlayerState struct {
+	ObjLogicID       *uint32 `protobuf:"varint,1,req,name=objLogicID" json:"objLogicID,omitempty"`
+	ObjState         *uint32 `protobuf:"varint,2,req,name=objState" json:"objState,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPlayerState) Reset()                    { *m = CPlayerState{} }
+func (m *CPlayerState) String() string            { return proto.CompactTextString(m) }
+func (*CPlayerState) ProtoMessage()               {}
+func (*CPlayerState) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
+
+func (m *CPlayerState) GetObjLogicID() uint32 {
+	if m != nil && m.ObjLogicID != nil {
+		return *m.ObjLogicID
+	}
+	return 0
+}
+
+func (m *CPlayerState) GetObjState() uint32 {
+	if m != nil && m.ObjState != nil {
+		return *m.ObjState
+	}
+	return 0
+}
+
+type CPlayerGridChange struct {
+	ObjLogicID       *uint32 `protobuf:"varint,1,req,name=objLogicID" json:"objLogicID,omitempty"`
+	X                *uint32 `protobuf:"varint,2,req,name=x" json:"x,omitempty"`
+	Y                *uint32 `protobuf:"varint,3,req,name=y" json:"y,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *CPlayerGridChange) Reset()                    { *m = CPlayerGridChange{} }
+func (m *CPlayerGridChange) String() string            { return proto.CompactTextString(m) }
+func (*CPlayerGridChange) ProtoMessage()               {}
+func (*CPlayerGridChange) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
+
+func (m *CPlayerGridChange) GetObjLogicID() uint32 {
+	if m != nil && m.ObjLogicID != nil {
+		return *m.ObjLogicID
+	}
+	return 0
+}
+
+func (m *CPlayerGridChange) GetX() uint32 {
+	if m != nil && m.X != nil {
+		return *m.X
+	}
+	return 0
+}
+
+func (m *CPlayerGridChange) GetY() uint32 {
+	if m != nil && m.Y != nil {
+		return *m.Y
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*CPlayerConnect)(nil), "Player.cPlayerConnect")
 	proto.RegisterType((*CPlayerCreator)(nil), "Player.cPlayerCreator")
+	proto.RegisterType((*CUiMessage)(nil), "Player.cUiMessage")
+	proto.RegisterType((*CPlayerObjInfo)(nil), "Player.cPlayerObjInfo")
 	proto.RegisterType((*CPlayerInfo)(nil), "Player.cPlayerInfo")
 	proto.RegisterType((*CPlayerItem)(nil), "Player.cPlayerItem")
 	proto.RegisterType((*CPlayerTrun)(nil), "Player.cPlayerTrun")
+	proto.RegisterType((*CPlayerState)(nil), "Player.cPlayerState")
+	proto.RegisterType((*CPlayerGridChange)(nil), "Player.cPlayerGridChange")
 }
 
 func init() { proto.RegisterFile("Player.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 178 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x8d, 0x3f, 0xaf, 0x82, 0x50,
-	0x0c, 0x47, 0xf3, 0xee, 0x23, 0xe4, 0xd1, 0x87, 0x44, 0x3b, 0xb1, 0x98, 0x10, 0x26, 0x26, 0xdd,
-	0x5d, 0x61, 0x21, 0x71, 0x70, 0xe0, 0x0b, 0x20, 0x16, 0x73, 0x0d, 0xb7, 0xd7, 0x34, 0x75, 0xf0,
-	0xdb, 0x3b, 0xf0, 0xcf, 0xad, 0xcd, 0xef, 0x9c, 0x1c, 0x88, 0x2f, 0x43, 0xfb, 0x26, 0x39, 0x3c,
-	0xc5, 0xab, 0xc7, 0x70, 0xfc, 0xf2, 0x1c, 0x92, 0x6e, 0x3c, 0x4b, 0xcf, 0x4c, 0x9d, 0xe2, 0x16,
-	0xfe, 0xca, 0xc1, 0x32, 0xa9, 0xbd, 0xa5, 0x3f, 0x99, 0x29, 0x36, 0xdf, 0x8c, 0x50, 0xab, 0x5e,
-	0x26, 0x86, 0x58, 0xeb, 0x99, 0x39, 0xc1, 0xff, 0xc4, 0xd4, 0xdc, 0x7b, 0x04, 0x30, 0xb3, 0x8e,
-	0x31, 0x04, 0xdc, 0x3a, 0x4a, 0x4d, 0x66, 0x8a, 0x08, 0x77, 0x10, 0x11, 0x2b, 0x49, 0x63, 0x1d,
-	0xa5, 0xbf, 0x99, 0x29, 0x82, 0x7c, 0xbf, 0xba, 0x4a, 0x0e, 0x13, 0x08, 0xad, 0x92, 0x5b, 0xf2,
-	0xc7, 0x65, 0x6e, 0xe4, 0xc5, 0x88, 0x00, 0xfe, 0xfa, 0x38, 0xfb, 0xbb, 0xed, 0xea, 0x6a, 0x4d,
-	0xf4, 0x95, 0x95, 0x31, 0xf1, 0x09, 0x00, 0x00, 0xff, 0xff, 0xc3, 0xfb, 0x5a, 0x03, 0xea, 0x00,
-	0x00, 0x00,
+	// 293 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0x41, 0x6f, 0x82, 0x40,
+	0x10, 0x85, 0x23, 0x12, 0x23, 0x03, 0x1a, 0xd9, 0x5e, 0xb8, 0x34, 0x31, 0x7b, 0xf2, 0xd4, 0x5e,
+	0x3c, 0x35, 0xe9, 0x09, 0x93, 0x4a, 0x52, 0x5a, 0x93, 0xea, 0x0f, 0x58, 0x70, 0xa4, 0x4b, 0x65,
+	0x97, 0x2c, 0xdb, 0x44, 0xff, 0x7d, 0xc3, 0x2e, 0x42, 0x0f, 0xde, 0x66, 0x77, 0xde, 0xfb, 0xde,
+	0xcc, 0x40, 0xb0, 0x3b, 0xb3, 0x2b, 0xaa, 0xa7, 0x5a, 0x49, 0x2d, 0xc9, 0xc4, 0xbe, 0x28, 0x85,
+	0x79, 0x6e, 0xcb, 0x58, 0x0a, 0x81, 0xb9, 0x26, 0x0b, 0x98, 0xc6, 0x67, 0x2e, 0x50, 0xf3, 0x63,
+	0x34, 0x5a, 0x3a, 0xab, 0xd9, 0x7f, 0x8d, 0x42, 0xa6, 0xa5, 0xea, 0x34, 0x28, 0x74, 0x72, 0xd3,
+	0xac, 0x01, 0xf2, 0x03, 0x4f, 0xb1, 0x69, 0x58, 0x81, 0x24, 0x04, 0xef, 0xc0, 0xd3, 0xa6, 0xf8,
+	0x60, 0x15, 0x1a, 0x81, 0x47, 0x1e, 0xc0, 0x67, 0x3f, 0x69, 0x53, 0xec, 0x98, 0x6a, 0x3f, 0x9d,
+	0xe5, 0x68, 0x35, 0xa3, 0x71, 0x4f, 0xfe, 0xcc, 0xca, 0x44, 0x9c, 0x24, 0xf1, 0x60, 0x74, 0xb1,
+	0xc8, 0xb6, 0xbc, 0x46, 0x8e, 0x29, 0x7d, 0x18, 0xf3, 0x6d, 0x1d, 0x8d, 0xcd, 0x63, 0x0e, 0x13,
+	0x9e, 0xb2, 0xcb, 0xb6, 0x8e, 0x5c, 0x13, 0xfd, 0x02, 0x7e, 0x07, 0x31, 0x04, 0x00, 0xe7, 0x36,
+	0x39, 0x09, 0xc0, 0x15, 0x36, 0xad, 0x1d, 0x21, 0x04, 0x0f, 0x85, 0x46, 0xb5, 0xe7, 0x15, 0x1a,
+	0x96, 0x4b, 0x1f, 0x07, 0xaf, 0xc6, 0xca, 0xa0, 0x35, 0x56, 0xfd, 0xe6, 0xcf, 0x7d, 0x7b, 0xaf,
+	0x7e, 0x05, 0x21, 0x00, 0x32, 0x2b, 0xdf, 0x65, 0xc1, 0xf3, 0x64, 0x33, 0x44, 0x9c, 0x36, 0x5c,
+	0xd9, 0x08, 0xba, 0x86, 0xa0, 0x33, 0x7c, 0x69, 0xa6, 0xf1, 0xae, 0x63, 0x01, 0x53, 0x99, 0x95,
+	0xa6, 0x6f, 0xd7, 0xa3, 0xaf, 0x10, 0x76, 0xae, 0x37, 0xc5, 0x8f, 0xf1, 0x37, 0x13, 0xc5, 0x7d,
+	0xab, 0xb9, 0x8e, 0x33, 0x5c, 0xc7, 0x1c, 0xe4, 0x2f, 0x00, 0x00, 0xff, 0xff, 0xe6, 0x65, 0x84,
+	0x12, 0xda, 0x01, 0x00, 0x00,
 }
