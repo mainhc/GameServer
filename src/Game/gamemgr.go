@@ -2,6 +2,7 @@ package Game
 
 import (
 	"bytes"
+	//"container/list"
 	"encoding/binary"
 	"log"
 	"msgconfig"
@@ -46,14 +47,6 @@ func InitGame() {
 
 }
 
-func GetGameCanStart() bool {
-	if m_iGameState == KaiShi {
-		return true
-	} else {
-		return false
-	}
-}
-
 func s2cZhunbei() {
 	m_iTimeGo--
 	sendMsg := &Player.CUiMessage{}
@@ -87,7 +80,20 @@ func doZhunBei() {
 	}()
 	wg.Wait()
 	NetServer.SetGameCanStart()
+
+	sendMsg := &Player.CGameRaceStart{}
+	tempint := uint32(0)
+	sendMsg.ClientId = &tempint
+	senddata, _ := proto.Marshal(sendMsg)
+	var sendbuf bytes.Buffer
+	xNum := uint32(100004)
+	tempsendbuf := bytes.NewBuffer([]byte{})
+	binary.Write(tempsendbuf, binary.LittleEndian, xNum)
+	sendbuf.Write(tempsendbuf.Bytes())
+	sendbuf.Write(senddata)
+	NetServer.BroadCastMsgToClient(sendbuf.Bytes())
 	ticker.Stop()
+
 }
 
 func updateGame(dt int) {
@@ -102,6 +108,29 @@ func updateGame(dt int) {
 		}
 	} else {
 		if m_iGameState == KaiShi {
+
+			if NetServer.IsPlayerAllOk() {
+				m_iGameState = KaiShiOK
+				//通知玩家创建
+				NetServer.CreatePlayer(0)
+			}
+		} else if m_iGameState == KaiShiOK {
+			pTempList := NetServer.GetNextClientCmd()
+			iLen := pTempList.Len()
+			if iLen > 0 {
+				var sendbuf bytes.Buffer
+				xNum := uint32(100000)
+				tempsendbuf := bytes.NewBuffer([]byte{})
+				binary.Write(tempsendbuf, binary.LittleEndian, xNum)
+				sendbuf.Write(tempsendbuf.Bytes())
+				for pTemp := pTempList.Front(); pTemp != nil; pTemp = pTemp.Next() {
+					pData := pTemp.Value.([]byte)
+					sendbuf.Write(pData)
+				}
+				pTempList.Init()
+				log.Print(sendbuf.Bytes())
+				NetServer.BroadCastMsgToClient(sendbuf.Bytes())
+			}
 
 		}
 	}

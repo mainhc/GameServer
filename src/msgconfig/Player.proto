@@ -15,6 +15,10 @@ message cUiMessage{
 	repeated uint32 akMsgParame=2;
 }
 
+message cGameRaceStart{
+	required uint32 ClientId = 1;
+}
+
 message cPlayerObjInfo{
 	required uint32 x = 1;
 	required uint32 y = 2;
@@ -46,4 +50,8 @@ message cPlayerGridChange{
 	required uint32 objLogicID = 1;
 	required uint32 x =2;
 	required uint32 y =3;
+}
+
+message c2sClientGameWorldOK{
+	required uint32 myClientID = 1;
 }

@@ -1,22 +1,9 @@
 package Game
 
 type GameState int
-const(
-        ZhunBie GameState = iota
-        KaiShi
-) 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const (
+	ZhunBie GameState = iota
+	KaiShi
+	KaiShiOK
+)
